@@ -63,6 +63,7 @@ export default function Experience() {
     y >= rect.top - PAD &&
     y <= rect.bottom + PAD;
 
+  // Hover-mode: close when leaving the saved card rect (unless over popover)
   useEffect(() => {
     if (!(open && !touchMode)) return;
     const onMove = (e) => {
@@ -75,6 +76,7 @@ export default function Experience() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, touchMode, cardRect, overOverlay]);
 
+  // Recalculate card rect on scroll/resize so bounds stay accurate
   useEffect(() => {
     if (!open) return;
     const recalc = () => {
@@ -93,7 +95,8 @@ export default function Experience() {
 
   const openOnHover = (idx, e) => {
     if (touchMode) return;
-    setCardRect(e.currentTarget.getBoundingClientRect());
+    const r = e.currentTarget.getBoundingClientRect();
+    setCardRect(r);
     setHoverIdx(idx);
   };
 
@@ -102,8 +105,9 @@ export default function Experience() {
   };
 
   const onCardTouchStart = (idx, e) => {
+    const el = e.currentTarget;
     setTouchMode(true);
-    setCardRect(e.currentTarget.getBoundingClientRect());
+    setCardRect(el.getBoundingClientRect());
     setHoverIdx(idx);
   };
 
@@ -114,6 +118,7 @@ export default function Experience() {
   };
 
   return (
+    <section ref={sectionRef} id="experience" className="section">
       <div className="container">
         <Reveal><h2 className="text-3xl font-semibold mb-8 text-center">Experience</h2></Reveal>
 
@@ -143,11 +148,11 @@ export default function Experience() {
         <PopoverAnchored
           open={open}
           mode="center"
-          containerRef={sectionRef}     // center over this section (your current behavior)
+          containerRef={sectionRef}     // center over this section
           onClose={closeAll}
           title={active ? `${active.role} — ${active.company}` : ""}
-          backdrop={touchMode}          // tap-away in touch mode
-          capturePointer={true}
+          backdrop={touchMode}           // tap-away in touch mode
+          capturePointer={true}          // interact with popover
           onOverlayEnter={() => setOverOverlay(true)}
           onOverlayLeave={() => setOverOverlay(false)}
         >
@@ -169,5 +174,6 @@ export default function Experience() {
           )}
         </PopoverAnchored>
       </div>
+    </section>
   );
 }

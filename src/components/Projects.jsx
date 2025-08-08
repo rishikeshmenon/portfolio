@@ -110,8 +110,9 @@ export default function Projects() {
   };
 
   const onCardTouchStart = (idx, e) => {
+    const el = e.currentTarget;
     setTouchMode(true);
-    setCardRect(e.currentTarget.getBoundingClientRect());
+    setCardRect(el.getBoundingClientRect());
     setHoverIdx(idx);
   };
 
@@ -122,6 +123,7 @@ export default function Projects() {
   };
 
   return (
+    <section ref={sectionRef} id="projects" className="section">
       <div className="container">
         <Reveal><h2 className="text-3xl font-semibold mb-8 text-center">Projects</h2></Reveal>
 
@@ -150,7 +152,7 @@ export default function Projects() {
         <PopoverAnchored
           open={open}
           mode="center"
-          containerRef={sectionRef}   // center over Projects section (your current behavior)
+          containerRef={sectionRef}     // center over Projects section
           onClose={closeAll}
           title={active ? active.title : ""}
           backdrop={touchMode}
@@ -175,5 +177,6 @@ export default function Projects() {
           )}
         </PopoverAnchored>
       </div>
+    </section>
   );
 }
