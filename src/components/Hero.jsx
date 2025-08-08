@@ -35,7 +35,7 @@ export default function Hero() {
         </div>
 
         <div className="mt-6 flex items-center justify-center gap-4 text-white/70">
-          <a className="link-underline" href="https://www.linkedin.com/in/rishikesh-menon" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a className="link-underline" href="https://linkedin.com/in/rishikesh-menon" target="_blank" rel="noreferrer">LinkedIn</a>
           <span>•</span>
           <a className="link-underline" href="https://github.com/rishikeshmenon" target="_blank" rel="noreferrer">GitHub</a>
           <span>•</span>

@@ -1,23 +1,15 @@
+// src/components/Reveal.jsx
 import { motion, useAnimation, useInView } from "framer-motion";
 import { useEffect, useRef } from "react";
 
-export default function Reveal({
-  as: Tag = "div",
-  delay = 0,
-  amount = 0.25,      // how much of the element must be visible [0..1]
-  className = "",
-  children
-}) {
+export default function Reveal({ as: Tag = "div", delay = 0, amount = 0.25, className = "", children }) {
   const ref = useRef(null);
   const controls = useAnimation();
-  const inView = useInView(ref, { amount, margin: "0px 0px -5% 0px" }); // slight bottom margin for smoother exit
+  const inView = useInView(ref, { amount, margin: "0px 0px -5% 0px" });
 
   useEffect(() => {
-    if (inView) {
-      controls.start("visible");
-    } else {
-      controls.start("hidden");
-    }
+    if (inView) controls.start("visible");
+    else controls.start("hidden");
   }, [inView, controls]);
 
   return (
