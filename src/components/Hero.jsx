@@ -6,7 +6,7 @@ export default function Hero() {
   const [typedText, setTypedText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   
-  const fullText = "Automation & systems tinkerer";
+  const fullText = "I build systems that do the work while you sleep.";
   const subtitle = "I love using technology to shave time off repetitive tasks and make processes hum.";
 
   // 0 when the top of hero hits top of viewport; 1 when bottom hits top (i.e., you've scrolled past it)
@@ -113,11 +113,8 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
       >
-        <a href="#projects" className="btn-primary">
-          <span>View Projects</span>
-          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
+        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+          <span>View Resume</span>
         </a>
         <a href="#contact" className="btn btn-ghost">
           <span>Contact Me</span>
