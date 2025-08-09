@@ -146,7 +146,7 @@ export default function PopoverAnchored({
             />
           )}
           <motion.div
-            className="fixed inset-0 z-50 pointer-events-none"
+            className={`fixed inset-0 z-50 pointer-events-none ${isMobile ? 'flex items-center justify-center' : ''}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -155,7 +155,7 @@ export default function PopoverAnchored({
               ref={panelRef}
               className={`relative ${capturePointer ? "pointer-events-auto" : "pointer-events-none"} ${
                 isMobile 
-                  ? "card p-6 w-full max-w-md mx-auto" 
+                  ? "card p-6" 
                   : "card p-5"
               }`}
               initial={{ 
@@ -171,15 +171,13 @@ export default function PopoverAnchored({
               }}
               transition={{ type: "spring", stiffness: 280, damping: 24 }}
               style={{
-                position: isMobile ? "fixed" : "absolute",
+                position: isMobile ? "relative" : "absolute",
                 ...(isMobile ? {
-                  left: "50%",
-                  top: "50%",
-                  transform: "translate(-50%, -50%)",
-                  maxWidth: "calc(100vw - 32px)",
+                  width: "calc(100vw - 32px)",
+                  maxWidth: "28rem",
                   maxHeight: "calc(100vh - 100px)",
                   overflowY: "auto",
-                  margin: "0 16px",
+                  margin: "16px",
                   zIndex: 60,
                 } : {
                   maxWidth: Math.min(560, vw - 32),
