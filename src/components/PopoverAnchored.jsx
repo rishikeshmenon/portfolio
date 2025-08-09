@@ -86,26 +86,24 @@ export default function PopoverAnchored({
   if (mode === "anchor" && !pos) return null;
   if (mode === "center" && !centerPos) return null;
 
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
+  const vw = window.innerWidth || 1024;
+  const vh = window.innerHeight || 768;
   const isMobile = vw < 768;
   
-  // Mobile-first responsive sizing
-  const maxW = isMobile ? vw - 16 : Math.min(560, vw - 32);
-  const padding = isMobile ? 8 : 16;
-
-  // Position math with mobile-first modal approach
+  // Simplified positioning for better mobile experience
   let left, top, transform, showArrow = false, arrowStyle = {};
   
-  if (mode === "anchor") {
-    if (isMobile) {
-      // Mobile: Full-screen modal centered
-      left = vw / 2;
-      top = vh / 2;
-      transform = "translate(-50%, -50%)";
-      showArrow = false; // No arrow for mobile modal
-    } else {
-      // Desktop positioning (original logic but improved)
+  if (isMobile) {
+    // Mobile: Always use centered modal approach regardless of mode
+    left = "50%";
+    top = "50%";
+    transform = "translate(-50%, -50%)";
+    showArrow = false;
+  } else {
+    // Desktop positioning
+    if (mode === "anchor") {
+      const maxW = Math.min(560, vw - 32);
+      const padding = 16;
       const half = maxW / 2;
       const clampedX = Math.max(padding + half, Math.min(vw - padding - half, pos.x));
       left = clampedX;
@@ -121,20 +119,13 @@ export default function PopoverAnchored({
         showArrow = true;
         arrowStyle = { bottom: -6 };
       }
-    }
-  } else {
-    // mode === "center"
-    if (isMobile) {
-      // Mobile: Full-screen modal centered
-      left = vw / 2;
-      top = vh / 2;
-      transform = "translate(-50%, -50%)";
     } else {
+      // mode === "center"
       left = centerPos.x;
       top = centerPos.y;
       transform = "translate(-50%, -50%)";
+      showArrow = false;
     }
-    showArrow = false; // no arrow for centered popover
   }
 
   return createPortal(
@@ -164,30 +155,41 @@ export default function PopoverAnchored({
               ref={panelRef}
               className={`relative ${capturePointer ? "pointer-events-auto" : "pointer-events-none"} ${
                 isMobile 
-                  ? "card-hover p-6 mx-4 max-w-sm w-full" 
+                  ? "card p-6 w-full max-w-md mx-auto" 
                   : "card p-5"
               }`}
               initial={{ 
                 opacity: 0, 
-                y: isMobile ? 20 : 6, 
-                scale: isMobile ? 0.9 : 0.98 
+                y: isMobile ? 30 : 6, 
+                scale: isMobile ? 0.95 : 0.98 
               }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ 
                 opacity: 0, 
-                y: isMobile ? 20 : 6, 
-                scale: isMobile ? 0.9 : 0.98 
+                y: isMobile ? 30 : 6, 
+                scale: isMobile ? 0.95 : 0.98 
               }}
-              transition={{ type: "spring", stiffness: 300, damping: 26 }}
+              transition={{ type: "spring", stiffness: 280, damping: 24 }}
               style={{
-                position: "absolute",
-                maxWidth: isMobile ? "calc(100vw - 32px)" : maxW,
-                maxHeight: isMobile ? "calc(100vh - 120px)" : "auto",
-                overflowY: isMobile ? "auto" : "visible",
-                left,
-                top,
-                transform,
-                zIndex: 60,
+                position: isMobile ? "fixed" : "absolute",
+                ...(isMobile ? {
+                  left: "50%",
+                  top: "50%",
+                  transform: "translate(-50%, -50%)",
+                  maxWidth: "calc(100vw - 32px)",
+                  maxHeight: "calc(100vh - 100px)",
+                  overflowY: "auto",
+                  margin: "0 16px",
+                  zIndex: 60,
+                } : {
+                  maxWidth: Math.min(560, vw - 32),
+                  maxHeight: "auto",
+                  overflowY: "visible",
+                  left,
+                  top,
+                  transform,
+                  zIndex: 60,
+                })
               }}
               onPointerEnter={onOverlayEnter}
               onPointerLeave={onOverlayLeave}
