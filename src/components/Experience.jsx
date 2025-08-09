@@ -49,12 +49,14 @@ export default function Experience() {
   const gridRef = useRef(null);
 
   const [hoverIdx, setHoverIdx] = useState(null);
+  const [pinnedIdx, setPinnedIdx] = useState(null);
   const [cardRect, setCardRect] = useState(null);
   const [overOverlay, setOverOverlay] = useState(false);
   const [touchMode, setTouchMode] = useState(false);
 
-  const open = hoverIdx != null;
-  const active = open ? experiences[hoverIdx] : null;
+  const activeIdx = pinnedIdx !== null ? pinnedIdx : hoverIdx;
+  const open = activeIdx != null;
+  const active = open ? experiences[activeIdx] : null;
 
   const withinRect = (rect, x, y) =>
     rect &&
@@ -63,24 +65,24 @@ export default function Experience() {
     y >= rect.top - PAD &&
     y <= rect.bottom + PAD;
 
-  // Hover-mode: close when leaving the saved card rect (unless over popover)
+  // Hover-mode: close when leaving the saved card rect (unless over popover or pinned)
   useEffect(() => {
-    if (!(open && !touchMode)) return;
+    if (!(open && !touchMode && pinnedIdx === null)) return;
     const onMove = (e) => {
       if (!cardRect) return;
       const inside = withinRect(cardRect, e.clientX, e.clientY);
-      if (!inside && !overOverlay) closeAll();
+      if (!inside && !overOverlay) setHoverIdx(null);
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, touchMode, cardRect, overOverlay]);
+  }, [open, touchMode, cardRect, overOverlay, pinnedIdx]);
 
   // Recalculate card rect on scroll/resize so bounds stay accurate
   useEffect(() => {
     if (!open) return;
     const recalc = () => {
-      const el = gridRef.current?.querySelector(`[data-idx="${hoverIdx}"]`);
+      const el = gridRef.current?.querySelector(`[data-idx="${activeIdx}"]`);
       if (!el) return;
       setCardRect(el.getBoundingClientRect());
     };
@@ -91,10 +93,10 @@ export default function Experience() {
       window.removeEventListener("resize", recalc);
       window.removeEventListener("scroll", recalc, true);
     };
-  }, [open, hoverIdx]);
+  }, [open, activeIdx]);
 
   const openOnHover = (idx, e) => {
-    if (touchMode) return;
+    if (touchMode || pinnedIdx !== null) return;
     // Check if device is mobile
     const isMobile = window.innerWidth < 768;
     if (isMobile) return; // Disable hover on mobile
@@ -105,18 +107,41 @@ export default function Experience() {
   };
 
   const onGridLeave = () => {
-    if (!touchMode && !overOverlay) closeAll();
+    if (!touchMode && !overOverlay && pinnedIdx === null) {
+      setHoverIdx(null);
+    }
   };
 
-  const onCardTouchStart = (idx, e) => {
+  const onCardClick = (idx, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const isMobile = window.innerWidth < 768;
     const el = e.currentTarget;
-    setTouchMode(true);
     setCardRect(el.getBoundingClientRect());
-    setHoverIdx(idx);
+    
+    if (isMobile) {
+      // Mobile: simple toggle
+      setTouchMode(true);
+      if (activeIdx === idx) {
+        closeAll();
+      } else {
+        setHoverIdx(idx);
+      }
+    } else {
+      // Desktop: pin/unpin
+      if (pinnedIdx === idx) {
+        setPinnedIdx(null);
+      } else {
+        setPinnedIdx(idx);
+        setHoverIdx(null);
+      }
+    }
   };
 
   const closeAll = () => {
     setHoverIdx(null);
+    setPinnedIdx(null);
     setTouchMode(false);
     setCardRect(null);
   };
@@ -148,16 +173,16 @@ export default function Experience() {
               key={idx}
               data-idx={idx}
               className={`text-left card-hover p-6 cursor-pointer relative group ${
-                hoverIdx === idx ? 'ring-2 ring-accent-primary/50' : ''
-              }`}
+                activeIdx === idx ? 'ring-2 ring-accent-primary/50' : ''
+              } ${pinnedIdx === idx ? 'ring-accent-secondary/70' : ''}`}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ amount: 0.3 }}
               transition={{ delay: idx * 0.1 }}
               onMouseEnter={(e) => openOnHover(idx, e)}
-              onTouchStart={(e) => onCardTouchStart(idx, e)}
+              onClick={(e) => onCardClick(idx, e)}
               whileHover={{ 
-                scale: 1.02,
+                scale: pinnedIdx === null ? 1.02 : 1,
                 transition: { type: "spring", stiffness: 300, damping: 20 }
               }}
             >
@@ -203,11 +228,22 @@ export default function Experience() {
                 )}
               </div>
 
-              {/* Hover indicator */}
-              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <svg className="w-5 h-5 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
+              {/* Hover/Pin indicator */}
+              <div className="absolute top-4 right-4 transition-opacity">
+                {pinnedIdx === idx ? (
+                  <div className="flex items-center gap-1 text-accent-secondary">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" />
+                    </svg>
+                    <span className="text-xs font-mono">pinned</span>
+                  </div>
+                ) : (
+                  <div className="opacity-0 group-hover:opacity-100">
+                    <svg className="w-5 h-5 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}
@@ -219,7 +255,7 @@ export default function Experience() {
           containerRef={sectionRef}     // center over this section
           onClose={closeAll}
           title=""
-          backdrop={touchMode}           // tap-away in touch mode
+          backdrop={touchMode || pinnedIdx !== null}  // backdrop for touch mode or pinned state
           capturePointer={true}          // interact with popover
           onOverlayEnter={() => setOverOverlay(true)}
           onOverlayLeave={() => setOverOverlay(false)}
@@ -289,6 +325,11 @@ export default function Experience() {
               {touchMode && (
                 <div className="text-xs text-text-tertiary mt-4 text-center font-mono">
                   // Tap outside or press ESC to close
+                </div>
+              )}
+              {pinnedIdx !== null && !touchMode && (
+                <div className="text-xs text-text-tertiary mt-4 text-center font-mono">
+                  // Click card again to unpin, or press ESC to close
                 </div>
               )}
             </div>

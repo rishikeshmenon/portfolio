@@ -104,16 +104,17 @@ export default function PopoverAnchored({
       transform = "translate(-50%, 0)";
       
       // Better vertical positioning for mobile
-      const safeTop = Math.max(padding, pos.y + offset);
-      const safeBottom = vh - padding;
+      const estimatedHeight = 300; // Estimate popup height
+      const safeTop = Math.max(padding + 60, pos.y + offset); // Add nav height
+      const safeBottom = vh - padding - estimatedHeight;
       
-      if (safeTop + 300 > safeBottom) { // Estimate popup height
+      if (safeTop > safeBottom) {
         // Show above if not enough space below
-        top = Math.max(padding, pos.y - offset - 300);
+        top = Math.max(padding + 60, pos.y - offset - estimatedHeight);
         showArrow = true;
         arrowStyle = { bottom: -6 };
       } else {
-        top = safeTop;
+        top = Math.min(safeTop, safeBottom);
         showArrow = true;
         arrowStyle = { top: -6 };
       }
@@ -138,9 +139,9 @@ export default function PopoverAnchored({
   } else {
     // mode === "center" - improved for mobile
     if (isMobile) {
-      // On mobile, use fixed positioning for better control
+      // On mobile, use safer centering with scroll consideration
       left = vw / 2;
-      top = vh / 2;
+      top = Math.min(vh / 2, vh - 200); // Ensure it doesn't go too low
       transform = "translate(-50%, -50%)";
     } else {
       left = centerPos.x;
@@ -184,11 +185,12 @@ export default function PopoverAnchored({
                 position: "absolute",
                 maxWidth: maxW,
                 width: isMobile ? "calc(100vw - 32px)" : "auto",
-                maxHeight: isMobile ? "calc(100vh - 100px)" : "auto",
+                maxHeight: isMobile ? "calc(100vh - 120px)" : "auto",
                 overflowY: isMobile ? "auto" : "visible",
                 left,
-                top,
+                top: Math.max(isMobile ? 80 : 0, top), // Ensure minimum top spacing on mobile
                 transform,
+                zIndex: 60, // Ensure it's above everything
               }}
               onPointerEnter={onOverlayEnter}
               onPointerLeave={onOverlayLeave}
