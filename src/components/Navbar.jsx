@@ -53,7 +53,7 @@ export default function Navbar() {
         {open && (
           <div id="mobile-menu" className="absolute left-0 right-0 top-16 md:hidden z-30">
             <div className="container">
-              <div className="card p-4 flex flex-col gap-1">
+              <div className="card p-4 flex flex-col gap-1 bg-black/70 backdrop-blur-sm border border-white/10">
                 <div className="flex items-center gap-2 mb-3 pb-3 border-b border-white/10">
                   <div className="flex gap-1.5">
                     <div className="w-3 h-3 rounded-full bg-accent-tertiary"></div>
