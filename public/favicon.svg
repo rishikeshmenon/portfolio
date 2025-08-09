@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <style>
+      .text { font: 700 320px 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    </style>
+  </defs>
+  <rect width="512" height="512" fill="transparent"/>
+  <g fill="#00ff88" text-anchor="middle" dominant-baseline="central">
+    <text class="text" x="256" y="270">RM</text>
+  </g>
+</svg>
