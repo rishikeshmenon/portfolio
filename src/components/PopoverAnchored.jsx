@@ -94,30 +94,16 @@ export default function PopoverAnchored({
   const maxW = isMobile ? vw - 16 : Math.min(560, vw - 32);
   const padding = isMobile ? 8 : 16;
 
-  // Position math with mobile optimization
+  // Position math with mobile-first modal approach
   let left, top, transform, showArrow = false, arrowStyle = {};
   
   if (mode === "anchor") {
     if (isMobile) {
-      // On mobile, always center horizontally and position vertically
+      // Mobile: Full-screen modal centered
       left = vw / 2;
-      transform = "translate(-50%, 0)";
-      
-      // Better vertical positioning for mobile
-      const estimatedHeight = 300; // Estimate popup height
-      const safeTop = Math.max(padding + 60, pos.y + offset); // Add nav height
-      const safeBottom = vh - padding - estimatedHeight;
-      
-      if (safeTop > safeBottom) {
-        // Show above if not enough space below
-        top = Math.max(padding + 60, pos.y - offset - estimatedHeight);
-        showArrow = true;
-        arrowStyle = { bottom: -6 };
-      } else {
-        top = Math.min(safeTop, safeBottom);
-        showArrow = true;
-        arrowStyle = { top: -6 };
-      }
+      top = vh / 2;
+      transform = "translate(-50%, -50%)";
+      showArrow = false; // No arrow for mobile modal
     } else {
       // Desktop positioning (original logic but improved)
       const half = maxW / 2;
@@ -137,11 +123,11 @@ export default function PopoverAnchored({
       }
     }
   } else {
-    // mode === "center" - improved for mobile
+    // mode === "center"
     if (isMobile) {
-      // On mobile, use safer centering with scroll consideration
+      // Mobile: Full-screen modal centered
       left = vw / 2;
-      top = Math.min(vh / 2, vh - 200); // Ensure it doesn't go too low
+      top = vh / 2;
       transform = "translate(-50%, -50%)";
     } else {
       left = centerPos.x;
@@ -155,10 +141,12 @@ export default function PopoverAnchored({
     <AnimatePresence>
       {open && (
         <>
-          {backdrop && (
+          {(backdrop || isMobile) && (
             <motion.div
               aria-hidden
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+              className={`fixed inset-0 z-40 backdrop-blur-sm ${
+                isMobile ? 'bg-black/80' : 'bg-black/60'
+              }`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -174,23 +162,32 @@ export default function PopoverAnchored({
           >
             <motion.div
               ref={panelRef}
-              className={`card relative ${capturePointer ? "pointer-events-auto" : "pointer-events-none"} ${
-                isMobile ? "p-4 mx-2" : "p-5"
+              className={`relative ${capturePointer ? "pointer-events-auto" : "pointer-events-none"} ${
+                isMobile 
+                  ? "card-hover p-6 mx-4 max-w-sm w-full" 
+                  : "card p-5"
               }`}
-              initial={{ opacity: 0, y: isMobile ? 10 : 6, scale: isMobile ? 0.95 : 0.98 }}
+              initial={{ 
+                opacity: 0, 
+                y: isMobile ? 20 : 6, 
+                scale: isMobile ? 0.9 : 0.98 
+              }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: isMobile ? 10 : 6, scale: isMobile ? 0.95 : 0.98 }}
+              exit={{ 
+                opacity: 0, 
+                y: isMobile ? 20 : 6, 
+                scale: isMobile ? 0.9 : 0.98 
+              }}
               transition={{ type: "spring", stiffness: 300, damping: 26 }}
               style={{
                 position: "absolute",
-                maxWidth: maxW,
-                width: isMobile ? "calc(100vw - 32px)" : "auto",
+                maxWidth: isMobile ? "calc(100vw - 32px)" : maxW,
                 maxHeight: isMobile ? "calc(100vh - 120px)" : "auto",
                 overflowY: isMobile ? "auto" : "visible",
                 left,
-                top: Math.max(isMobile ? 80 : 0, top), // Ensure minimum top spacing on mobile
+                top,
                 transform,
-                zIndex: 60, // Ensure it's above everything
+                zIndex: 60,
               }}
               onPointerEnter={onOverlayEnter}
               onPointerLeave={onOverlayLeave}

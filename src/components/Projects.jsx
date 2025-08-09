@@ -261,13 +261,13 @@ export default function Projects() {
           containerRef={sectionRef}     // center over Projects section
           onClose={closeAll}
           title=""
-          backdrop={touchMode || pinnedIdx !== null}  // backdrop for touch mode or pinned state
+          backdrop={touchMode || pinnedIdx !== null}  // backdrop handled automatically for mobile
           capturePointer={true}
           onOverlayEnter={() => setOverOverlay(true)}
           onOverlayLeave={() => setOverOverlay(false)}
         >
           {active && (
-            <div className="min-w-[280px] max-w-[500px] w-full">
+            <div className="min-w-[280px] max-w-[500px] w-full mobile-modal">
               {/* Terminal-style header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -278,10 +278,24 @@ export default function Projects() {
                   </div>
                   <div className="text-text-tertiary font-mono text-xs">project_details.md</div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-accent-primary animate-pulse"></div>
-                  <span className="text-xs font-mono text-accent-primary">active</span>
-                </div>
+                
+                {/* Status or close button */}
+                {touchMode ? (
+                  <button 
+                    onClick={closeAll}
+                    className="md:hidden p-2 rounded-lg hover:bg-white/10 text-text-secondary"
+                    aria-label="Close"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full bg-accent-primary animate-pulse"></div>
+                    <span className="text-xs font-mono text-accent-primary">active</span>
+                  </div>
+                )}
               </div>
               
               {/* Project header */}
