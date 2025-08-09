@@ -7,40 +7,40 @@ const PAD = 4;
 
 const experiences = [
   {
-    role: "Network Security Automation Intern",
-    company: "FireCompass",
-    period: "2024",
-    summary: "Automated reconnaissance pipelines and built an AI classifier to rank vulnerabilities.",
+    role: "Undergraduate Teaching Assistant",
+    company: "Queen’s University – School of Computing",
+    period: "Jan 2023 – May 2025",
+    summary: "Hosted labs/demos for 100+ students; built grading automations.",
     bullets: [
-      "Cut manual triage by prioritizing vuln classes automatically.",
-      "Built multi-stage pipelines to gather/normalize scan outputs.",
-      "Improved response speed by reducing analyst touch time."
+      "Reduced manual grading time by ~40% across 500+ submissions",
+      "Created rubric-based plagiarism detection & review pipelines",
+      "Helped students debug core CS concepts and structure code"
     ],
-    tech: ["Python", "OpenCV", "LLMs", "Pandas"]
+    tech: ["Python", "Java", "C", "Prolog"]
   },
   {
-    role: "Software Intern (ERP & Dashboards)",
+    role: "Software Developer Intern (ERP & Dashboards)",
     company: "Winteriors Decor LLC",
-    period: "2023",
-    summary: "Designed ERP dashboards and project tracking with stakeholder feedback loops.",
+    period: "Summer 2024",
+    summary: "Cloud dashboards + SQL KPIs with ERP automation and refactors.",
     bullets: [
-      "Gathered requirements from non-technical teams and shipped fixes.",
-      "Streamlined reporting with clearer, actionable metrics.",
-      "Reduced back-and-forth by documenting flows and SLAs."
+      "Real-time tracking for 15+ projects via integrated dashboards",
+      "ERP module refactors cut average load times by ~35%",
+      "Reporting overhead reduced by ~20% with data aggregation & UX"
     ],
-    tech: ["Python", "SQL", "Dashboards", "Process Design"]
+    tech: ["JavaScript", "SQL", "Python", "Process Design"]
   },
   {
-    role: "Teaching Assistant",
-    company: "Queen’s University",
-    period: "2023–2024",
-    summary: "Supported programming courses and helped students debug core CS concepts.",
+    role: "Analyst Intern",
+    company: "FireCompass",
+    period: "Summer 2023",
+    summary: "Multi-threaded Python automations for distributed scans; vuln classifier.",
     bullets: [
-      "Mentored students on problem-solving and code structure.",
-      "Clarified tricky concepts with hands-on examples.",
-      "Kept labs running smoothly under time pressure."
+      "Decreased scan triage time by orchestrating distributed tasks",
+      "ImageAI/OpenCV model prioritized vulnerabilities by severity",
+      "Built logging and automated alerts for faster response"
     ],
-    tech: ["Python", "Java", "Debugging", "Mentorship"]
+    tech: ["Python", "OpenCV", "ImageAI", "Pipelines"]
   },
 ];
 
@@ -261,7 +261,7 @@ export default function Experience() {
           onOverlayLeave={() => setOverOverlay(false)}
         >
           {active && (
-            <div className="min-w-[280px] max-w-[500px] w-full mobile-modal">
+            <div className="min-w[(280px] max-w-[500px] w-full mobile-modal">
               {/* Terminal-style header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">

@@ -22,16 +22,8 @@ export default function About() {
               left: `${10 + (i % 2) * 70}%`,
               right: i % 2 === 0 ? '10%' : 'auto',
             }}
-            animate={{
-              y: [0, -10, 0],
-              opacity: [0.1, 0.2, 0.1],
-            }}
-            transition={{
-              duration: 6 + i,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 1.5,
-            }}
+            animate={{ y: [0, -10, 0], opacity: [0.1, 0.2, 0.1] }}
+            transition={{ duration: 6 + i, repeat: Infinity, ease: "easeInOut", delay: i * 1.5 }}
           >
             {snippet}
           </motion.div>
@@ -68,47 +60,31 @@ export default function About() {
           </div>
 
           <div className="space-y-6">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ amount: 0.3 }}
-              transition={{ delay: 0.2 }}
-            >
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ amount: 0.3 }} transition={{ delay: 0.2 }}>
               <h3 className="text-xl font-bold text-text-primary mb-3 flex items-center justify-center gap-2">
                 <span className="text-accent-primary font-mono">#</span>
                 The Philosophy
               </h3>
               <p className="text-lg text-text-secondary leading-relaxed">
-                I'm a builder who hates repetitive work. If a task can be done faster, smarter, or more reliably,
-                I'll automate it — then iterate until it's delightful.
+                I’m a builder who hates repetition. If something can be faster, smarter, or more reliable, I automate it —
+                then refine until it feels effortless.
               </p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ amount: 0.3 }}
-              transition={{ delay: 0.4 }}
-            >
+            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ amount: 0.3 }} transition={{ delay: 0.4 }}>
               <h3 className="text-xl font-bold text-text-primary mb-3 flex items-center justify-center gap-2">
                 <span className="text-accent-secondary font-mono">#</span>
                 What I Build
               </h3>
               <p className="text-text-secondary leading-relaxed">
-                I ship projects that crawl the web, clean data, wire up APIs, and stitch services together so they run while I sleep.
-                I'm comfortable translating needs between technical and non-technical teams and turning them into shipped features.
+                I bridge non‑technical teams and engineering, wire up data pipelines and UIs, and ship systems that keep
+                running when I’m offline.
               </p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ amount: 0.3 }}
-              transition={{ delay: 0.6 }}
-              className="pt-4 border-t border-white/10"
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.3 }} transition={{ delay: 0.6 }} className="pt-4 border-t border-white/10">
               <div className="flex flex-wrap justify-center gap-3">
-                {['Automation', 'Systems Design', 'API Integration', 'Data Processing', 'Problem Solving'].map((skill, i) => (
+                {['Automation', 'Systems Design', 'Data Pipelines', 'Security', 'DevOps'].map((skill, i) => (
                   <motion.span
                     key={skill}
                     className="px-3 py-1.5 bg-accent-primary/10 text-accent-primary border border-accent-primary/20 rounded-lg font-mono text-sm hover:bg-accent-primary/20 transition-colors"

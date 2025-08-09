@@ -7,47 +7,36 @@ const PAD = 4;
 
 const projects = [
   {
-    title: "Roof App",
-    description: "Student rental platform with scraping + SQL filtering.",
+    title: "Roof (QTMA 1st Place)",
+    description: "Student rental platform aggregating & deduping listings with SQL-based filters.",
     bullets: [
-      "Aggregated listings; deduped and normalized data.",
-      "Implemented filters to speed up discovery.",
-      "Designed a clean, simple UX for search."
+      "Aggregated and normalized housing listings across multiple sources",
+      "SQL-driven filtering to speed up discovery",
+      "Recognized by QTMA for user-focused design"
     ],
-    tech: ["Python", "PostgreSQL", "React"],
+    tech: ["Python", "SQL", "React"],
     link: "#"
   },
   {
     title: "Home Lab & Automation",
-    description: "Proxmox + Docker with VPN, segmentation, monitoring; n8n automations.",
+    description: "Proxmox + Docker stack with segmented networks, VPN, monitoring, and n8n flows.",
     bullets: [
-      "Automated backups, health checks, and alerts.",
-      "Central reverse proxy and TLS for services.",
-      "n8n flows to auto-handle routine tasks."
+      "Automated backups, health checks, and alerts",
+      "Central reverse proxy and TLS for services",
+      "Repeatable task automations using n8n"
     ],
-    tech: ["Proxmox", "Docker", "n8n", "Traefik"],
+    tech: ["Proxmox", "Docker", "Traefik", "n8n"],
     link: "#"
   },
   {
-    title: "AI Event Center Classifier",
-    description: "Collected screenshots + classified pages via ImageAI/OpenCV.",
+    title: "Grading Automation Toolkit",
+    description: "Rubric-based code grading and plagiarism detection automations used in CS courses.",
     bullets: [
-      "Multi-threaded pipeline for ingest & labeling.",
-      "Trained model and tuned thresholds.",
-      "Cut manual review time significantly."
+      "Cut manual evaluation time by ~40% across 500+ submissions",
+      "Unified pipelines for code checks and rubric logging",
+      "Consistent, auditable outputs for teaching teams"
     ],
-    tech: ["Python", "OpenCV", "ImageAI"],
-    link: "#"
-  },
-  {
-    title: "Job Board Scraper + AI Filter",
-    description: "n8n workflow that emails matched new-grad roles.",
-    bullets: [
-      "Parsed sites and normalized job fields.",
-      "Lightweight prompting/embeddings to score fit.",
-      "Automated daily digest to inbox."
-    ],
-    tech: ["n8n", "Python", "LLMs"],
+    tech: ["Python", "Pandas", "CLI"],
     link: "#"
   },
 ];

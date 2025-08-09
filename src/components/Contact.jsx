@@ -123,6 +123,11 @@ export default function Contact() {
             <p className="text-text-secondary mt-2 max-w-2xl mx-auto">
               Have a project, role, or idea you'd like to jam on? Drop a note — I'll get back within a day.
             </p>
+            <div className="mt-3">
+              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+                <span>View Resume</span>
+              </a>
+            </div>
           </div>
         </Reveal>
 
