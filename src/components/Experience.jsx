@@ -95,6 +95,10 @@ export default function Experience() {
 
   const openOnHover = (idx, e) => {
     if (touchMode) return;
+    // Check if device is mobile
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return; // Disable hover on mobile
+    
     const r = e.currentTarget.getBoundingClientRect();
     setCardRect(r);
     setHoverIdx(idx);
@@ -221,7 +225,7 @@ export default function Experience() {
           onOverlayLeave={() => setOverOverlay(false)}
         >
           {active && (
-            <div className="min-w-[320px] max-w-[500px]">
+            <div className="min-w-[280px] max-w-[500px] w-full">
               {/* Terminal-style header */}
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex gap-1.5">

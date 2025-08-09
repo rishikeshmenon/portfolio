@@ -51,8 +51,8 @@ export default function Hero() {
       className="container py-24 md:py-32 text-center relative"
       style={{ x, opacity, filter: blur, scale, willChange: "transform, opacity, filter" }}
     >
-      {/* Floating code elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Floating code elements - hidden on mobile for better readability */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
         <motion.div 
           className="absolute top-20 left-10 text-accent-primary/20 font-mono text-sm"
           animate={{ y: [0, -10, 0] }}

@@ -101,6 +101,10 @@ export default function Projects() {
 
   const openOnHover = (idx, e) => {
     if (touchMode) return;
+    // Check if device is mobile
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return; // Disable hover on mobile
+    
     setCardRect(e.currentTarget.getBoundingClientRect());
     setHoverIdx(idx);
   };
@@ -227,7 +231,7 @@ export default function Projects() {
           onOverlayLeave={() => setOverOverlay(false)}
         >
           {active && (
-            <div className="min-w-[320px] max-w-[500px]">
+            <div className="min-w-[280px] max-w-[500px] w-full">
               {/* Terminal-style header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -285,13 +289,13 @@ export default function Projects() {
               </div>
 
               {/* Action buttons */}
-              <div className="flex gap-3 pt-2 border-t border-white/10">
+              <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-white/10">
                 {active.link && active.link !== "#" && (
                   <a 
                     href={active.link} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="btn-primary text-sm flex items-center gap-2"
+                    className="btn-primary text-sm flex items-center justify-center gap-2 flex-1"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -299,7 +303,7 @@ export default function Projects() {
                     View Project
                   </a>
                 )}
-                <button className="btn btn-ghost text-sm flex items-center gap-2">
+                <button className="btn btn-ghost text-sm flex items-center justify-center gap-2 flex-1">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                   </svg>

@@ -11,8 +11,8 @@ export default function About() {
 
   return (
     <div className="container relative">
-      {/* Floating code snippets */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Floating code snippets - hidden on mobile for better readability */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
         {codeSnippets.map((snippet, i) => (
           <motion.div
             key={i}

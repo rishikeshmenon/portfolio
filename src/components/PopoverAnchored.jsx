@@ -87,30 +87,66 @@ export default function PopoverAnchored({
   if (mode === "center" && !centerPos) return null;
 
   const vw = window.innerWidth;
-  const maxW = Math.min(560, vw - 24);
+  const vh = window.innerHeight;
+  const isMobile = vw < 768;
+  
+  // Mobile-first responsive sizing
+  const maxW = isMobile ? vw - 16 : Math.min(560, vw - 32);
+  const padding = isMobile ? 8 : 16;
 
-  // Position math
+  // Position math with mobile optimization
   let left, top, transform, showArrow = false, arrowStyle = {};
+  
   if (mode === "anchor") {
-    const half = maxW / 2;
-    const clampedX = Math.max(12 + half, Math.min(vw - 12 - half, pos.x));
-    left = clampedX;
-    if (placement === "bottom") {
-      top = pos.y + offset;
+    if (isMobile) {
+      // On mobile, always center horizontally and position vertically
+      left = vw / 2;
       transform = "translate(-50%, 0)";
-      showArrow = true;
-      arrowStyle = { top: -6 };
+      
+      // Better vertical positioning for mobile
+      const safeTop = Math.max(padding, pos.y + offset);
+      const safeBottom = vh - padding;
+      
+      if (safeTop + 300 > safeBottom) { // Estimate popup height
+        // Show above if not enough space below
+        top = Math.max(padding, pos.y - offset - 300);
+        showArrow = true;
+        arrowStyle = { bottom: -6 };
+      } else {
+        top = safeTop;
+        showArrow = true;
+        arrowStyle = { top: -6 };
+      }
     } else {
-      top = pos.y - offset;
-      transform = "translate(-50%, -100%)";
-      showArrow = true;
-      arrowStyle = { bottom: -6 };
+      // Desktop positioning (original logic but improved)
+      const half = maxW / 2;
+      const clampedX = Math.max(padding + half, Math.min(vw - padding - half, pos.x));
+      left = clampedX;
+      
+      if (placement === "bottom") {
+        top = pos.y + offset;
+        transform = "translate(-50%, 0)";
+        showArrow = true;
+        arrowStyle = { top: -6 };
+      } else {
+        top = pos.y - offset;
+        transform = "translate(-50%, -100%)";
+        showArrow = true;
+        arrowStyle = { bottom: -6 };
+      }
     }
   } else {
-    // mode === "center"
-    left = centerPos.x;
-    top = centerPos.y;
-    transform = "translate(-50%, -50%)";
+    // mode === "center" - improved for mobile
+    if (isMobile) {
+      // On mobile, use fixed positioning for better control
+      left = vw / 2;
+      top = vh / 2;
+      transform = "translate(-50%, -50%)";
+    } else {
+      left = centerPos.x;
+      top = centerPos.y;
+      transform = "translate(-50%, -50%)";
+    }
     showArrow = false; // no arrow for centered popover
   }
 
@@ -137,14 +173,19 @@ export default function PopoverAnchored({
           >
             <motion.div
               ref={panelRef}
-              className={`card p-5 relative ${capturePointer ? "pointer-events-auto" : "pointer-events-none"}`}
-              initial={{ opacity: 0, y: 6, scale: 0.98 }}
+              className={`card relative ${capturePointer ? "pointer-events-auto" : "pointer-events-none"} ${
+                isMobile ? "p-4 mx-2" : "p-5"
+              }`}
+              initial={{ opacity: 0, y: isMobile ? 10 : 6, scale: isMobile ? 0.95 : 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 6, scale: 0.98 }}
+              exit={{ opacity: 0, y: isMobile ? 10 : 6, scale: isMobile ? 0.95 : 0.98 }}
               transition={{ type: "spring", stiffness: 300, damping: 26 }}
               style={{
                 position: "absolute",
                 maxWidth: maxW,
+                width: isMobile ? "calc(100vw - 32px)" : "auto",
+                maxHeight: isMobile ? "calc(100vh - 100px)" : "auto",
+                overflowY: isMobile ? "auto" : "visible",
                 left,
                 top,
                 transform,

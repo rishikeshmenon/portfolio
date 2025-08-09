@@ -181,6 +181,26 @@ body::before {
   .font-mono {
     @apply text-xs;
   }
+  
+  /* Better mobile popover styling */
+  .card {
+    @apply text-sm;
+  }
+  
+  /* Mobile popover improvements */
+  .popover-content {
+    @apply text-sm leading-relaxed;
+  }
+  
+  /* Ensure touch targets are large enough */
+  button, .btn, .btn-primary, .btn-ghost {
+    @apply min-h-[44px] px-4 py-2;
+  }
+  
+  /* Better spacing for mobile cards */
+  .card-hover {
+    @apply mb-4;
+  }
 }
 
 @media (max-width: 640px) {
