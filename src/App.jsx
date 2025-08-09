@@ -25,7 +25,7 @@ export default function App() {
           <section
             key={s.id}
             id={s.id}
-            className="min-h-screen flex items-center justify-center scroll-mt-24 px-4"
+            className="section"
           >
             {/* Keep animations local to components via whileInView, no global snapping */}
             {s.el}

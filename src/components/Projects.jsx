@@ -125,7 +125,19 @@ export default function Projects() {
   return (
     <section ref={sectionRef} id="projects" className="section">
       <div className="container">
-        <Reveal><h2 className="text-3xl font-semibold mb-8 text-center">Projects</h2></Reveal>
+        <Reveal>
+          <div className="text-center mb-8">
+            <div className="text-accent-primary font-mono text-sm mb-2">
+              <span className="text-text-secondary">~/projects</span>
+              <span className="text-accent-primary"> $ </span>
+              <span>find . -name "*.project" -type f</span>
+            </div>
+            <h2 className="text-3xl font-semibold text-text-primary">Projects</h2>
+            <p className="text-text-secondary mt-2 max-w-2xl mx-auto">
+              A collection of automation tools, systems, and creative solutions
+            </p>
+          </div>
+        </Reveal>
 
         <div
           ref={gridRef}
@@ -136,15 +148,69 @@ export default function Projects() {
             <motion.div
               key={idx}
               data-idx={idx}
-              className="text-left card p-6 hover:-translate-y-0.5 transition-transform cursor-pointer"
+              className={`text-left card-hover p-6 cursor-pointer relative group ${
+                hoverIdx === idx ? 'ring-2 ring-accent-primary/50' : ''
+              }`}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ amount: 0.3 }}
+              transition={{ delay: idx * 0.1 }}
               onMouseEnter={(e) => openOnHover(idx, e)}
               onTouchStart={(e) => onCardTouchStart(idx, e)}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { type: "spring", stiffness: 300, damping: 20 }
+              }}
             >
-              <h3 className="text-xl font-bold mb-1">{proj.title}</h3>
-              <p className="text-white/80">{proj.description}</p>
+              {/* Gradient border effect */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-accent-primary/20 to-accent-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+              
+              {/* Terminal-style header */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-accent-tertiary/60"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-400/60"></div>
+                    <div className="w-3 h-3 rounded-full bg-accent-primary/60"></div>
+                  </div>
+                  <div className="text-text-tertiary font-mono text-xs">project.json</div>
+                </div>
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                  <svg className="w-4 h-4 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </div>
+              </div>
+              
+              <h3 className="text-xl font-bold mb-2 text-text-primary group-hover:text-accent-primary transition-colors">
+                {proj.title}
+              </h3>
+              <p className="text-text-secondary group-hover:text-text-primary transition-colors mb-3">
+                {proj.description}
+              </p>
+              
+              {/* Tech stack preview */}
+              <div className="flex flex-wrap gap-1">
+                {proj.tech.slice(0, 3).map((tech, i) => (
+                  <span 
+                    key={i} 
+                    className="text-xs px-2 py-1 rounded bg-accent-secondary/10 text-accent-secondary border border-accent-secondary/20 font-mono"
+                  >
+                    {tech}
+                  </span>
+                ))}
+                {proj.tech.length > 3 && (
+                  <span className="text-xs px-2 py-1 text-text-tertiary font-mono">
+                    +{proj.tech.length - 3}
+                  </span>
+                )}
+              </div>
+
+              {/* Project status indicator */}
+              <div className="absolute top-4 right-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="w-2 h-2 rounded-full bg-accent-primary animate-pulse"></div>
+                <span className="text-xs font-mono text-accent-primary">active</span>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -154,26 +220,99 @@ export default function Projects() {
           mode="center"
           containerRef={sectionRef}     // center over Projects section
           onClose={closeAll}
-          title={active ? active.title : ""}
+          title=""
           backdrop={touchMode}
           capturePointer={true}
           onOverlayEnter={() => setOverOverlay(true)}
           onOverlayLeave={() => setOverOverlay(false)}
         >
           {active && (
-            <>
-              <p className="text-white/85 mb-3">{active.description}</p>
-              <ul className="list-disc list-inside space-y-1 text-white/90">
-                {active.bullets.map((b, i) => <li key={i}>{b}</li>)}
-              </ul>
-              <div className="flex flex-wrap gap-2 mt-4">
-                {active.tech.map((t, i) => (
-                  <span key={i} className="text-sm px-2 py-1 rounded-full border border-white/10 bg-white/5">
-                    {t}
-                  </span>
-                ))}
+            <div className="min-w-[320px] max-w-[500px]">
+              {/* Terminal-style header */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-accent-tertiary"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                    <div className="w-3 h-3 rounded-full bg-accent-primary"></div>
+                  </div>
+                  <div className="text-text-tertiary font-mono text-xs">project_details.md</div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 rounded-full bg-accent-primary animate-pulse"></div>
+                  <span className="text-xs font-mono text-accent-primary">active</span>
+                </div>
               </div>
-            </>
+              
+              {/* Project header */}
+              <div className="mb-4">
+                <h3 className="text-2xl font-bold text-text-primary mb-1">{active.title}</h3>
+                <p className="text-text-secondary">{active.description}</p>
+              </div>
+
+              {/* Features/Highlights */}
+              <div className="mb-4">
+                <h4 className="text-lg font-bold text-text-primary mb-2 flex items-center gap-2">
+                  <span className="text-accent-primary font-mono">#</span>
+                  Key Features
+                </h4>
+                <ul className="space-y-2">
+                  {active.bullets.map((bullet, i) => (
+                    <li key={i} className="flex items-start gap-2 text-text-secondary">
+                      <span className="text-accent-secondary font-mono text-sm mt-0.5">▸</span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              {/* Tech Stack */}
+              <div className="mb-4">
+                <h4 className="text-lg font-bold text-text-primary mb-2 flex items-center gap-2">
+                  <span className="text-accent-secondary font-mono">#</span>
+                  Tech Stack
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {active.tech.map((tech, i) => (
+                    <span 
+                      key={i} 
+                      className="text-sm px-3 py-1.5 rounded-lg bg-accent-secondary/10 text-accent-secondary border border-accent-secondary/20 font-mono hover:bg-accent-secondary/20 transition-colors"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex gap-3 pt-2 border-t border-white/10">
+                {active.link && active.link !== "#" && (
+                  <a 
+                    href={active.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="btn-primary text-sm flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    View Project
+                  </a>
+                )}
+                <button className="btn btn-ghost text-sm flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  Copy Link
+                </button>
+              </div>
+              
+              {touchMode && (
+                <div className="text-xs text-text-tertiary mt-4 text-center font-mono">
+                  // Tap outside or press ESC to close
+                </div>
+              )}
+            </div>
           )}
         </PopoverAnchored>
       </div>

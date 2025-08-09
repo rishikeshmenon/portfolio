@@ -120,7 +120,19 @@ export default function Experience() {
   return (
     <section ref={sectionRef} id="experience" className="section">
       <div className="container">
-        <Reveal><h2 className="text-3xl font-semibold mb-8 text-center">Experience</h2></Reveal>
+        <Reveal>
+          <div className="text-center mb-8">
+            <div className="text-accent-primary font-mono text-sm mb-2">
+              <span className="text-text-secondary">~/experience</span>
+              <span className="text-accent-primary"> $ </span>
+              <span>ls -la</span>
+            </div>
+            <h2 className="text-3xl font-semibold text-text-primary">Experience</h2>
+            <p className="text-text-secondary mt-2 max-w-2xl mx-auto">
+              Professional journey through automation, systems, and problem-solving
+            </p>
+          </div>
+        </Reveal>
 
         <div
           ref={gridRef}
@@ -131,16 +143,68 @@ export default function Experience() {
             <motion.div
               key={idx}
               data-idx={idx}
-              className="text-left card p-6 hover:-translate-y-0.5 transition-transform cursor-pointer"
+              className={`text-left card-hover p-6 cursor-pointer relative group ${
+                hoverIdx === idx ? 'ring-2 ring-accent-primary/50' : ''
+              }`}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ amount: 0.3 }}
+              transition={{ delay: idx * 0.1 }}
               onMouseEnter={(e) => openOnHover(idx, e)}
               onTouchStart={(e) => onCardTouchStart(idx, e)}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { type: "spring", stiffness: 300, damping: 20 }
+              }}
             >
-              <h3 className="text-xl font-bold">{exp.role}</h3>
-              <span className="text-sm text-white/60">{exp.company} • {exp.period}</span>
-              <p className="mt-3 text-white/85">{exp.summary}</p>
+              {/* Gradient border effect */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-accent-primary/20 to-accent-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+              
+              {/* Terminal-style header */}
+              <div className="flex items-center gap-2 mb-3">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-accent-tertiary/60"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-400/60"></div>
+                  <div className="w-3 h-3 rounded-full bg-accent-primary/60"></div>
+                </div>
+                <div className="text-text-tertiary font-mono text-xs">experience.job</div>
+              </div>
+              
+              <h3 className="text-xl font-bold text-text-primary group-hover:text-accent-primary transition-colors">
+                {exp.role}
+              </h3>
+              <div className="flex items-center gap-2 text-sm text-text-secondary font-mono">
+                <span className="text-accent-secondary">{exp.company}</span>
+                <span className="text-accent-primary">•</span>
+                <span>{exp.period}</span>
+              </div>
+              <p className="mt-3 text-text-secondary group-hover:text-text-primary transition-colors">
+                {exp.summary}
+              </p>
+              
+              {/* Tech stack preview */}
+              <div className="flex flex-wrap gap-1 mt-3">
+                {exp.tech.slice(0, 3).map((tech, i) => (
+                  <span 
+                    key={i} 
+                    className="text-xs px-2 py-1 rounded bg-accent-primary/10 text-accent-primary border border-accent-primary/20 font-mono"
+                  >
+                    {tech}
+                  </span>
+                ))}
+                {exp.tech.length > 3 && (
+                  <span className="text-xs px-2 py-1 text-text-tertiary font-mono">
+                    +{exp.tech.length - 3} more
+                  </span>
+                )}
+              </div>
+
+              {/* Hover indicator */}
+              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <svg className="w-5 h-5 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -150,27 +214,80 @@ export default function Experience() {
           mode="center"
           containerRef={sectionRef}     // center over this section
           onClose={closeAll}
-          title={active ? `${active.role} — ${active.company}` : ""}
+          title=""
           backdrop={touchMode}           // tap-away in touch mode
           capturePointer={true}          // interact with popover
           onOverlayEnter={() => setOverOverlay(true)}
           onOverlayLeave={() => setOverOverlay(false)}
         >
           {active && (
-            <>
-              <p className="text-white/85 mb-3">{active.summary}</p>
-              <ul className="list-disc list-inside space-y-1 text-white/90">
-                {active.bullets.map((b, i) => <li key={i}>{b}</li>)}
-              </ul>
-              <div className="flex flex-wrap gap-2 mt-4">
-                {active.tech.map((t, i) => (
-                  <span key={i} className="text-xs px-2 py-1 rounded-full border border-white/10 bg-white/5">
-                    {t}
-                  </span>
-                ))}
+            <div className="min-w-[320px] max-w-[500px]">
+              {/* Terminal-style header */}
+              <div className="flex items-center gap-2 mb-4">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-accent-tertiary"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-accent-primary"></div>
+                </div>
+                <div className="text-text-tertiary font-mono text-xs">experience_details.json</div>
               </div>
-              {touchMode && <div className="text-xs text-white/50 mt-2">Tap outside or press Esc to close</div>}
-            </>
+              
+              {/* JSON-style content */}
+              <div className="font-mono text-sm bg-bg-secondary/50 p-4 rounded-lg border border-white/10">
+                <div className="text-text-secondary">{"{"}</div>
+                <div className="ml-4">
+                  <div className="text-accent-secondary">"role"</div>
+                  <span className="text-text-tertiary">: </span>
+                  <span className="text-accent-primary">"{active.role}"</span>
+                  <span className="text-text-tertiary">,</span>
+                </div>
+                <div className="ml-4">
+                  <div className="text-accent-secondary">"company"</div>
+                  <span className="text-text-tertiary">: </span>
+                  <span className="text-accent-primary">"{active.company}"</span>
+                  <span className="text-text-tertiary">,</span>
+                </div>
+                <div className="ml-4">
+                  <div className="text-accent-secondary">"period"</div>
+                  <span className="text-text-tertiary">: </span>
+                  <span className="text-accent-primary">"{active.period}"</span>
+                </div>
+                <div className="text-text-secondary">{"}"}</div>
+              </div>
+
+              <div className="mt-4">
+                <h4 className="text-lg font-bold text-text-primary mb-2">Overview</h4>
+                <p className="text-text-secondary mb-4">{active.summary}</p>
+                
+                <h4 className="text-lg font-bold text-text-primary mb-2">Key Achievements</h4>
+                <ul className="space-y-2 mb-4">
+                  {active.bullets.map((bullet, i) => (
+                    <li key={i} className="flex items-start gap-2 text-text-secondary">
+                      <span className="text-accent-primary font-mono text-sm mt-0.5">▸</span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+                
+                <h4 className="text-lg font-bold text-text-primary mb-2">Tech Stack</h4>
+                <div className="flex flex-wrap gap-2">
+                  {active.tech.map((tech, i) => (
+                    <span 
+                      key={i} 
+                      className="text-xs px-3 py-1.5 rounded-lg bg-accent-primary/10 text-accent-primary border border-accent-primary/20 font-mono hover:bg-accent-primary/20 transition-colors"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              {touchMode && (
+                <div className="text-xs text-text-tertiary mt-4 text-center font-mono">
+                  // Tap outside or press ESC to close
+                </div>
+              )}
+            </div>
           )}
         </PopoverAnchored>
       </div>
