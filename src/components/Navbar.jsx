@@ -7,6 +7,7 @@ export default function Navbar() {
   const links = [
     { to: "hero", label: "Home" },
     { to: "about", label: "About" },
+    { to: "skills", label: "Skills" },
     { to: "experience", label: "Experience" },
     { to: "projects", label: "Projects" },
     { to: "contact", label: "Contact" },
