@@ -235,7 +235,7 @@ export default function Contact() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <button 
                 type="submit" 
-                className={`btn-primary flex items-center gap-2 ${
+                className={`btn-solid flex items-center gap-2 ${
                   status.sending ? 'opacity-75 cursor-not-allowed' : ''
                 }`} 
                 disabled={status.sending}
